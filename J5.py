@@ -41,14 +41,13 @@ def find_sol(section):
             if tmp := find_subs(part["start"][3]):
                 part["end"] = []
                 for i, solution in enumerate(tmp):
-                    if part["start"][0] + 1 == steps:
-                        if solution[2] == final:
-                            answer_location = part["location"] + [f"[{i}]"]
-                            part["end"].append({"start": [part["start"][0] + 1] + solution})
-                    else:
-                        part["end"].append({"start": [part["start"][0] + 1] + solution,
-                                            "location": part["location"] + [f"[{i}]"]})
-                find_sol(part["end"])
+                    part["end"].append({"start": [part["start"][0] + 1] + solution,
+                                        "location": part["location"] + [f"[{i}]"]})
+                    if solution[2] == final and part["start"][0] + 1 == steps:
+                        answer_location = part["location"] + [f"[{i}]"]
+                        return
+                if part["start"][0] + 1 != steps:
+                    find_sol(part["end"])
 
 
 with open("inputJ5.txt", 'r') as data:
