@@ -1,6 +1,3 @@
-answer_location = None
-
-
 def split_string(string):
     output = []
     buffer = ""
@@ -33,7 +30,7 @@ def find_location(location_info):
     done = ""
     for i, location in enumerate(location_info):
         if i != 0:
-            print(eval("solutions[0]" + (done + "['end']" + location) + "['start'][1:]"))
+            print(" ".join([str(a) for a in eval("solutions[0]" + (done + "['end']" + location) + "['start'][1:]")]))
             done += "['end']" + location
 
 
@@ -64,6 +61,7 @@ with open("inputJ5.txt", 'r') as data:
             steps, initial, final = split_string(line)
             steps = int(steps)
 
+answer_location = None
 solutions = [{"start": [0, 0, 0, initial], "location": ["[0]"]}]
 find_sol(solutions)
 find_location(answer_location)
