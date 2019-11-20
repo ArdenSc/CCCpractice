@@ -1,3 +1,6 @@
+answer_location = None
+
+
 def split_string(string):
     output = []
     buffer = ""
@@ -26,18 +29,29 @@ def find_subs(string):
     return locations if locations != [] else False
 
 
+def find_location(location_info):
+    done = ""
+    for i, location in enumerate(location_info):
+        if i != 0:
+            print(eval("solutions[0]" + (done + "['end']" + location) + "['start'][1:]"))
+            done += "['end']" + location
+
+
 def find_sol(section):
-    for part in section:
-        if tmp := find_subs(part["start"][3]):
-            part["end"] = []
-            for solution in tmp:
-                if part["start"][0] + 1 == steps:
-                    if solution[2] == final:
-                        print(solution)
-                        exit()
-                else:
-                    part["end"].append({"start": [part["start"][0] + 1] + solution})
-            find_sol(part["end"])
+    global answer_location
+    if not answer_location:
+        for part in section:
+            if tmp := find_subs(part["start"][3]):
+                part["end"] = []
+                for i, solution in enumerate(tmp):
+                    if part["start"][0] + 1 == steps:
+                        if solution[2] == final:
+                            answer_location = part["location"] + [f"[{i}]"]
+                            part["end"].append({"start": [part["start"][0] + 1] + solution})
+                    else:
+                        part["end"].append({"start": [part["start"][0] + 1] + solution,
+                                            "location": part["location"] + [f"[{i}]"]})
+                find_sol(part["end"])
 
 
 with open("inputJ5.txt", 'r') as data:
@@ -50,5 +64,6 @@ with open("inputJ5.txt", 'r') as data:
             steps, initial, final = split_string(line)
             steps = int(steps)
 
-
-find_sol([{"start": [0, 0, 0, initial]}])
+solutions = [{"start": [0, 0, 0, initial], "location": ["[0]"]}]
+find_sol(solutions)
+find_location(answer_location)
