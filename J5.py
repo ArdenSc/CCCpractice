@@ -1,6 +1,3 @@
-rules = []
-
-
 def split_string(string):
     output = []
     buffer = ""
@@ -29,7 +26,22 @@ def find_subs(string):
     return locations if locations != [] else False
 
 
+def find_sol(section):
+    for part in section:
+        if tmp := find_subs(part["start"][3]):
+            part["end"] = []
+            for solution in tmp:
+                if part["start"][0] + 1 == steps:
+                    if solution[2] == final:
+                        print(solution)
+                        exit()
+                else:
+                    part["end"].append({"start": [part["start"][0] + 1] + solution})
+            find_sol(part["end"])
+
+
 with open("inputJ5.txt", 'r') as data:
+    rules = []
     for lineNum, line in enumerate(data):
         line = line.strip()
         if lineNum < 3:
@@ -39,24 +51,4 @@ with open("inputJ5.txt", 'r') as data:
             steps = int(steps)
 
 
-solutions = [{"start": [0, 0, 0, initial]}]
-
-
-def find_sol(section):
-    for part in section:
-        tmp = find_subs(part["start"][3])
-        if tmp:
-            part["end"] = []
-            for solution in tmp:
-                if part["start"][0] + 1 == steps:
-                    if solution[2] == final:
-                        print(solution)
-                        exit()
-                elif part["start"][0] + 1 < steps:
-                    part["end"].append({"start": [part["start"][0] + 1] + solution})
-                else:
-                    print("error")
-            find_sol(part["end"])
-
-
-find_sol(solutions)
+find_sol([{"start": [0, 0, 0, initial]}])
