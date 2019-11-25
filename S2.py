@@ -18,6 +18,6 @@ def find_prime_divisors(n):
 with open("inputS2.txt", 'r') as data:
     for lineNum, line in enumerate(data):
         line = line.strip()
-        if lineNum == 0:
+        if lineNum == 0 or line == "":
             continue
         print(find_prime_divisors(int(line)*2))
